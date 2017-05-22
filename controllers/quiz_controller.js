@@ -187,3 +187,76 @@ exports.check = function (req, res, next) {
         answer: answer
     });
 };
+
+// GET /quizzes/randomplay
+exports.randomplay = function (req, res, next) {
+
+	var numeroQuizes=0;
+	
+//INTENTO 1
+/*
+models.Quiz.count()
+	.then(result => {
+		numeroQuizes=(result.count);
+		 
+	});
+*/
+
+
+//INTENTO 2
+/**
+var opts = {}//{where: {/* some complex where clause object/struct }};
+var cb    = {count:0,function(err, info) {
+  console.log('count is ' + info.count);
+  console.log(info.rows); // info.records? info.data? er?
+	cb.count=info.count;
+}
+};
+models.Quiz.findAndCount(opts).done(cb);
+numeroQuizes=cb.count;
+*/
+
+
+
+//Intento 3
+/*
+models.Quiz.count()
+.then(c)  =>{
+  console.log("There are " + c + " projects!");
+numeroQuizes=c;
+}*/
+
+//Intento 4
+//numeroQuizes=models.Quiz.findAll().length;
+
+//Intento 5
+models.Quiz.count()
+    .then(quizzes=> {
+        numeroQuizes=quizzes.count;
+        
+    });
+
+
+
+
+    var answer = req.query.answer || '';
+	//creamos dos arrays, uno para sacar un id de pregunta sin caer en bucles innecesarios con la funcion random 
+	// y otro para almacenar las respuestas contestadas (score)
+	var N = models.Quiz.findAll({});// models.Quiz.length;  models.quizzes.length  models.Quiz.quizzes.length
+	var Array_idDisponible = []; /*el +1 lo uso por que los indices de cada pregunta no usan el numero 0*/
+	for(var i=1; i<=N; i++){
+		Array_idDisponible.push(i);
+	};
+	
+	var Array_idJugados = [];
+
+	var quiz = models.Quiz.findById(1);
+
+    res.render('quizzes/random_play', {
+        quiz: quiz,
+        answer: quiz.answer,
+	score: numeroQuizes//Array_idDisponible[Math.random()*(Array_idDisponible.length)]
+    });
+
+};
+
