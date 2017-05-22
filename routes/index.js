@@ -8,13 +8,17 @@ router.get('/', function(req, res, next) {
   res.render('index');
 });
 
-// Pagina de creditos
+// Pagina de autor
 router.get('/author', function(req, res, next) {
     res.render('author');
 });
 // Pagina de creditos
 router.get('/help', function(req, res, next) {
     res.render('help');
+});
+// Pagina de inicio de juego
+router.get('/quizzes/randomplay', function(req, res, next) {
+    res.render('play');
 });
 
 
